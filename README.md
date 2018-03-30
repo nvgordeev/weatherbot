@@ -1,1 +1,3 @@
-# Super simple weather bot for vk. Used vk_api, openweathermap API.
+# Super simple weather bot for vk.com
+
+Used vk_api lib, openweathermap API.
