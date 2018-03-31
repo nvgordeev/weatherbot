@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import re
 from vk_api.longpoll import VkEventType
+from render import render
 
 
 class EventProcessor:
@@ -11,13 +12,11 @@ class EventProcessor:
         self.weather_provider = weather_provider
         self.commands = [
             {
-                'name': 'help',
                 'aliases': ['help', u'помощь'],
                 'description': u"справка о командах",
                 'method': self.get_help
             },
             {
-                'name': 'now',
                 'aliases': ['now', u'сейчас'],
                 'description': u"Выводит погоду в данный момент",
                 'method': self.get_weather_now
@@ -31,14 +30,13 @@ class EventProcessor:
         wind_data = raw.get('wind')
         if not main_data:
             return u"Не удалось получить данные"
-        res = u"""
-            Сейчас в Кудымкаре
-            Температура: %s
-            Влажность воздуха: %s %%
-            Атмосферное давление: %s
-            Ветер: %s м/с
-        """ % (main_data.get('temp'), main_data.get('humidity'), float(main_data.get('pressure')) / 1.33322, wind_data.get('speed'))
-        return res
+        params = {
+            'temp': main_data.get('temp'),
+            'humidity': main_data.get('humidity'),
+            'pressure': int(float(main_data.get('pressure')) / 1.33322),
+            'wind_speed': wind_data.get('speed')
+        }
+        return render('weather.txt', params)
 
     def get_help(self):
         return "\n".join([", ".join([a for a in c['aliases']]) + ': ' + c['description'] for c in self.commands])
