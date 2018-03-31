@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-import re
 from vk_api.longpoll import VkEventType
+
+from command_parser import CommandParser
 from render import render
 
 
@@ -10,19 +11,13 @@ class EventProcessor:
         self.vk = vk
         self.incoming_events = vk.get_incoming_events()
         self.weather_provider = weather_provider
-        self.commands = [
-            {
-                'aliases': ['help', u'помощь'],
-                'description': u"справка о командах",
-                'method': self.get_help
-            },
+        self.parser = CommandParser([
             {
                 'aliases': ['now', u'сейчас'],
                 'description': u"Выводит погоду в данный момент",
                 'method': self.get_weather_now
             }
-        ]
-        self.build_regexp()
+        ])
 
     def get_weather_now(self):
         raw = self.weather_provider.get_weather_by_city('kudymkar')
@@ -38,23 +33,8 @@ class EventProcessor:
         }
         return render('weather.txt', params)
 
-    def get_help(self):
-        return "\n".join([", ".join([a for a in c['aliases']]) + ': ' + c['description'] for c in self.commands])
-
-    def build_regexp(self):
-        for command in self.commands:
-            command.update({
-                'regexp': "|".join(['(' + c + ')' for c in command['aliases']])
-            })
-
-    def parse_command(self, message):
-        for command in self.commands:
-            if re.match(command['regexp'], message.lower()):
-                return command['method']()
-        return u'Не могу понять :( используйте эти команды: \n' + self.get_help()
-
     def process_new_message(self, event):
-        self.vk.write_msg(event.user_id, self.parse_command(event.text))
+        self.vk.write_msg(event.user_id, self.parser.parse_command(event.text))
 
     def process_events(self):
         for event in self.incoming_events:
