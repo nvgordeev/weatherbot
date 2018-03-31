@@ -1,5 +1,5 @@
 from string import Template
-TEMPLATE_FOLDER = 'templates/'
+from settings import TEMPLATE_FOLDER
 
 
 def read_template(template_name):
