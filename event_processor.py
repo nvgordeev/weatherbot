@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from vk_api.longpoll import VkEventType
 
 from command_parser import CommandParser
@@ -13,19 +12,20 @@ class EventProcessor:
         self.weather_provider = weather_provider
         self.parser = CommandParser([
             {
-                'aliases': ['now', u'сейчас'],
-                'description': u"Выводит погоду в данный момент",
+                'aliases': ['now', 'сейчас'],
+                'description': "Выводит погоду в данный момент",
                 'method': self.get_weather_now
             }
         ])
 
-    def get_weather_now(self):
-        raw = self.weather_provider.get_weather_by_city('kudymkar')
+    def get_weather_now(self, city_name="Кудымкар"):
+        raw = self.weather_provider.get_weather_by_city(city_name)
         main_data = raw.get('main')
         wind_data = raw.get('wind')
         if not main_data:
-            return u"Не удалось получить данные"
+            return "Не удалось получить данные"
         params = {
+            'city_name': city_name,
             'temp': main_data.get('temp'),
             'humidity': main_data.get('humidity'),
             'pressure': int(float(main_data.get('pressure')) / 1.33322),

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import re
 
 
@@ -6,8 +5,8 @@ class CommandParser:
 
     def __init__(self, commands):
         self.commands = commands + [{
-                'aliases': ['help', u'помощь'],
-                'description': u"справка о командах",
+                'aliases': ['help', 'помощь'],
+                'description': "справка о командах",
                 'method': self.get_help
             }]
         self.build_regexp()
@@ -25,4 +24,4 @@ class CommandParser:
         for command in self.commands:
             if re.match(command['regexp'], text.lower()):
                 return command['method']()
-        return u'Не могу понять :( используйте эти команды: \n' + self.get_help()
+        return 'Не могу понять :( используйте эти команды: \n' + self.get_help()
