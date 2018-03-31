@@ -14,7 +14,7 @@ class EventProcessor:
                 'name': 'help',
                 'aliases': ['help', u'помощь'],
                 'description': u"справка о командах",
-                'method': self.get_weather_now
+                'method': self.get_help
             },
             {
                 'name': 'now',
