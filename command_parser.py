@@ -5,10 +5,10 @@ class CommandParser:
 
     def __init__(self, commands):
         self.commands = commands + [{
-                'aliases': ['help', 'помощь'],
-                'description': "справка о командах",
-                'method': self.get_help
-            }]
+            'aliases': ['help', 'помощь'],
+            'description': "справка о командах",
+            'method': self.get_help
+        }]
         self.build_regexp()
 
     def get_help(self):
@@ -25,5 +25,8 @@ class CommandParser:
             parsed = re.match(command['regexp'], text.lower())
             if parsed:
                 params = parsed.group(2) or command['default_params']
-                return command['method'](*params.split(' '))
+                try:
+                    return command['method'](*params.split(' '))
+                except:
+                    return 'Произошла ошибка при выполнении операции'
         return 'Не могу понять :( используйте эти команды: \n' + self.get_help()
