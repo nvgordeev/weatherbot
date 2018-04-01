@@ -17,11 +17,13 @@ class CommandParser:
     def build_regexp(self):
         for command in self.commands:
             command.update({
-                'regexp': "|".join(['(' + c + ')' for c in command['aliases']])
+                'regexp': "(" + "|".join([c for c in command['aliases']]) + ") *(.+)*"
             })
 
     def parse_command(self, text):
         for command in self.commands:
-            if re.match(command['regexp'], text.lower()):
-                return command['method']()
+            parsed = re.match(command['regexp'], text.lower())
+            if parsed:
+                params = parsed.group(2) or command['default_params']
+                return command['method'](*params.split(' '))
         return 'Не могу понять :( используйте эти команды: \n' + self.get_help()

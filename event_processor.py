@@ -14,18 +14,19 @@ class EventProcessor:
             {
                 'aliases': ['now', 'сейчас'],
                 'description': "Выводит погоду в данный момент",
+                'default_params': 'Кудымкар',
                 'method': self.get_weather_now
             }
         ])
 
-    def get_weather_now(self, city_name="Кудымкар"):
+    def get_weather_now(self, city_name):
         raw = self.weather_provider.get_weather_by_city(city_name)
         main_data = raw.get('main')
         wind_data = raw.get('wind')
         if not main_data:
             return "Не удалось получить данные"
         params = {
-            'city_name': city_name,
+            'city_name': raw.get('name'),
             'temp': main_data.get('temp'),
             'humidity': main_data.get('humidity'),
             'pressure': int(float(main_data.get('pressure')) / 1.33322),
