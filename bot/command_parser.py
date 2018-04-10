@@ -7,6 +7,7 @@ class CommandParser:
         self.commands = commands + [{
             'aliases': ['help', 'помощь'],
             'description': "справка о командах",
+            'default_params': "",
             'method': self.get_help
         }]
         self.build_regexp()
@@ -27,6 +28,7 @@ class CommandParser:
                 params = parsed.group(2) or command['default_params']
                 try:
                     return command['method'](*params.split(' '))
-                except:
+                except Exception as e:
+                    print (e)
                     return 'Произошла ошибка при выполнении операции'
         return 'Не могу понять :( используйте эти команды: \n' + self.get_help()

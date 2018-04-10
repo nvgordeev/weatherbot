@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from event_processor import EventProcessor
 from settings import TOKEN, OPENWEATHER_API_KEY
-from vk_api_wrapper import VkAPI
+from bot.vk_api_wrapper import VkAPI
 from weather_api import WeatherAPI
 
 

@@ -1,7 +1,8 @@
 from vk_api.longpoll import VkEventType
 
-from command_parser import CommandParser
-from render import render
+from bot.render import render
+
+from bot.command_parser import CommandParser
 
 
 class EventProcessor:

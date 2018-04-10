@@ -1,5 +1,5 @@
 $city_name
-Температура: $temp
-Влажность воздуха: $humidity %
-Атмосферное давление: $pressure мм.рт.ст.
-Ветер: $wind_speed м/с
+T: $temp
+H: $humidity %
+AP: $pressure
+WIND: $wind_speed m/s
